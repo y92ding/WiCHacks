@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Webdesign</title>
+    <link rel="stylesheet" href="webdesign/css/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" type="text/javascript" charset="utf-8"></script>
+	<style>
+	body{
+			background-color: #e0dfeb;
+			font-family: 'Roboto', sans-serif;
+		}
+		.header{
+			position:fixed;
+			left: -10px;
+			right: -10px;
+			height: 70px;
+			top: 0px;
+			background-color:#353a61;
+		}
+		.logo img{
+			height: 80px;
+			margin-top: -5px;
+			margin-left: 5px;
+		}
+		#body{
+			position: fixed;
+			top: 70px;
+			left: 0px;
+			right: 0px;
+			width: 100%;
+			overflow: auto;
+			height: 90%;
+		}
+		.mascot img{
+			height: 200px;
+			position: fixed;
+			top: 80px;
+			left: 20px;
+		}
+		#dialogbox{
+			margin-top: 69px;
+			width: 60%;
+			margin-left:325px;
+			margin-right: 15%;
+			background-color: #353a61;
+			color: #e0dfeb;
+			font-size: 16pt;
+			padding: 30px;
+		}
+		#questionForm{
+			margin-top: 10px;
+			width: 70%;
+			margin-left:16%;
+			margin-right: 15%;
+			height: 40px;
+		}
+		#questionForm input{
+			color: #353a61;
+			padding-left:30%;
+			height: 40px;
+			width: 65%;
+		}
+		#questionForm img{
+			width: 40px;
+		}
+		#ask{
+			background-color: #ff8086;
+			color: #353a61;
+			padding: 10px 20px 10px 20px;
+			width: 20%;
+			margin-left:38%;
+			margin-right: 40%;
+			margin-top: 20px;
+			text-align: center;
+			
+		}
+		.triangle{
+			position: fixed;
+			width: 60px;
+			height: 60px;
+			background-color: #353a61;
+			transform: rotate(45deg);
+			left: 317px;
+			top: 152px;
+			z-index: -1;
+		}
+		.dropdown{
+			position: fixed;
+			top:70px;
+			right:0px;
+		}
+		.dropdown-content{
+			position: fixed;
+			top: 120px;
+			right: 0px;
+		}
+		h1{
+			color: #e0dfeb;
+			margin-top: -20px;
+		}
+  #editor { 
+		width: 100%;
+		height: 150px;
+   }
+   #result{
+		position: fixed;
+		left: 0px;
+		right: 0px;
+		bottom: 5px;
+		text-align: center;
+   }
+	</style>
+    <meta name="description" content="description">
+	<script  src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+   
+</head>
+
+
+<body>
+<div class = "header">
+	<div class = "logo">
+		<a href = "index.html"><img src = "logo.png"></a>
+	</div>
+	</div>
+	<div id = "body">
+    <div class="mascot" onclick = "startRecord()">
+		<img src = "mascot.png">
+    </div> 
+	<div class = "triangle"></div>
+	<div id = "dialogbox">Hello! I am Code-ee the seal dog! Choose a topic that you want to learn!</div>
+
+   <div class="dropdown">
+        <button class="dropbtn">Choose a Topic!</button>
+        <div class="dropdown-content">
+         <ul style="list-style-type:none">
+        <div align="right">
+        <li class = "drop" ><a href="iteration.html">Loops/Iteration</a></li>
+        <li class = "drop"><a href="arrays.html">Data Structure</a></li>
+        <li class = "drop"><a href="compression.html">Compression</a></li>
+        <li class = "drop"><a href="algorithms.html">Algorithm</a></li>
+        </div>
+    </ul>
+     </div>
+	<div id = "result"></div>
+</div>
+
+
+    </div>
+</body>
+ <script>
+    $('.drop a').click(function(e){
+        e.preventDefault();
+         var href = $(this).attr("href");
+    $("#dialogbox").load(href, function() {
+        // do something after content has been loaded
+    });
+    })
+	
+	var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+		var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
+		var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
+		
+		var recognition = new SpeechRecognition();
+		var speechRecognitionList = new SpeechGrammarList();
+		recognition.grammars = speechRecognitionList;
+		recognition.lang = 'en-US';
+		recognition.interimResults = false;
+		recognition.maxAlternatives = 1;
+		function startRecord() {
+		  recognition.start();
+		  console.log('Ready to receive a color command.');
+		}
+		
+		var diagnostic = document.getElementById('result');
+		recognition.onresult = function(event) {
+		  var last = event.results.length - 1;
+		  var phrase = event.results[last][0].transcript;
+		  diagnostic.innerText = phrase + '?';
+		  console.log('Confidence: ' + event.results[0][0].confidence);
+		  myFunction1();
+		  console.log(phrase);
+		}
+		recognition.onspeechend = function() {
+		  recognition.stop();
+		}
+		recognition.onnomatch = function(event) {
+		  diagnostic.textContent = "I didn't understand you.";
+		}
+		recognition.onerror = function(event) {
+		  diagnostic.textContent = 'Error occurred in recognition: ' + event.error;
+		}
+</script>
+<script>
+function myFunction1() {
+    var x, text="";
+    // Get the value of the input field with id="numb"
+    x = document.getElementById("result").innerText;
+    // If x is Not a Number or less than one or greater than 10
+    if(x.search("hi") != -1){
+    text += "Hello!<br/>";
+    }
+    if (x.search("what") == 0 && x.search("algorithm") != -1) {
+        text += "An algorithm is an instance of logic written in software by software developers to be effective for the intended target computer(s) to produce output from given (perhaps null) input. <br/>";
+    }
+    else if(x.search("what") == 0 && x.search("recursion") != -1){
+    text += "Recursion occurs when a thing is defined interms of itself or of its type<br/>";
+    }
+    else if(x.search("what") == 0 && (x.search("heap") != -1)){
+    text += "Heap is a specialized tree-based data structure that satisfies the heap property<br/>";
+    }
+    else if(x.search("what") == 0 && (x.search("complexity") != -1)){
+    text += "Time complexity quantifies the amount of time taken by an algorithm to run as a functionof the length of the string representing the input<br/>" ;
+    }
+    else if(x.search("what") == 0 && (x.search("compression") != -1)){
+    text += "Compression is the process of encoding digital information using fewer bits<br/>";
+    }
+    else{
+    text += "I don't understand what you said.";
+    }
+	
+    document.getElementById("dialogbox").innerHTML = text;
+}
+</script>
+
+</html>

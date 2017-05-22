@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Webdesign</title>
+	<style>
+	body{
+			background-color: #e0dfeb;
+			font-family: 'Roboto', sans-serif;
+		}
+		.header{
+			position:fixed;
+			left: -10px;
+			right: -10px;
+			height: 70px;
+			top: 0px;
+			background-color:#353a61;
+		}
+		.logo img{
+			height: 80px;
+			margin-top: -5px;
+			margin-left: 5px;
+		}
+		#body{
+			position: fixed;
+			top: 70px;
+			left: 0px;
+			right: 0px;
+			width: 100%;
+			overflow: auto;
+			height: 100%;
+		}
+		.mascot img{
+			height: 400px;
+		}
+		.mascot{
+			margin: 0 auto;
+			margin-top: 70px;
+			width: 400px;
+		}
+		#dialogbox{
+			margin-top: 30px;
+			width: 70%;
+			margin-left:15%;
+			margin-right: 15%;
+			text-align: center;
+		}
+		#dialogbox span{
+			background-color: #353a61;
+			color: #e0dfeb;
+			font-size: 16pt;
+			padding: 10px 20px 10px 20px;
+		}
+		#questionForm{
+			margin-top: 10px;
+			width: 70%;
+			margin-left:16%;
+			margin-right: 15%;
+			height: 40px;
+		}
+		#questionForm input{
+			color: #353a61;
+			padding-left:30%;
+			height: 40px;
+			width: 65%;
+		}
+		#questionForm img{
+			width: 40px;
+		}
+		#ask{
+			background-color: #ff8086;
+			color: #353a61;
+			padding: 10px 20px 10px 20px;
+			width: 20%;
+			margin-left:38%;
+			margin-right: 40%;
+			margin-top: 20px;
+			text-align: center;
+			
+		}
+	</style>
+    <meta name="description" content="description">
+    <script src="jquery-3.1.1.js"></script>
+    <link rel="stylesheet" href="webdesign/css/styles.css">
+   
+</head>
+
+<h1> Welcome To Codeversation!</h1>
+
+
+<body>
+<div class = "header">
+	<div class = "logo">
+		<img src = "logo.png">
+	</div>
+	</div>
+	<div id = "body">
+    <div class="mascot">
+		<img src = "mascot.png">
+    </div> 
+	<div id = "dialogbox" onclick = "document.getElementById('dialogbox').innerHTML = '<span>I can\'t wait to teach you how to code!</span>'"><span>Hello! I am Code-ee the seal dog! Welcome to Codeversation!</span></div>
+
+   <div class="dropdown">
+        <button class="dropbtn">Basic Syntax</button>
+        <div class="dropdown-content">
+         <ul style="list-style-type:none">
+        <div align="right">
+        <li class = "drop" ><a href="iteration.html">loops/iteration/recursion</a></li>
+        <li class = "drop"><a href="#data structure">data structure</a></li>
+        <li class = "drop"><a href="compression.html">Compression</a></li>
+        <li class = "drop"><a href="#algorithm">algorithm</a></li>
+        </div>
+    </ul>
+     </div>
+</div>
+
+
+    </div>
+    <p> Place Your code here &darr; </p>
+<textarea> rows="4" cols="50" </textarea>
+
+    <div class="run button">
+    <button type="button">RUN</button>
+
+    </div>
+
+    <div class="display button">
+   <button type="button">DISPLAY</button>
+      
+    </div>
+	</div>
+</body>
+ <script>
+    $('.drop a').click(function(e){
+        e.preventDefault();
+         var href = $(this).attr("href");
+    $("#content").load(href, function() {
+        // do something after content has been loaded
+    });
+    })
+	
+		var resultLine = "";
+	var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+	var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
+	var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
+	
+	var recognition = new SpeechRecognition();
+	var speechRecognitionList = new SpeechGrammarList();
+	recognition.grammars = speechRecognitionList;
+	recognition.lang = 'en-US';
+	recognition.interimResults = false;
+	recognition.maxAlternatives = 1;
+
+	function startRecord() {
+	  recognition.start();
+	  console.log('Ready to receive a color command.');
+	}
+	
+	var diagnostic = document.getElementById('result');
+	recognition.onresult = function(event) {
+
+	  var last = event.results.length - 1;
+	  var phrase = event.results[last][0].transcript;
+
+	  resultLine = phrase + '?';
+	  console.log('Confidence: ' + event.results[0][0].confidence);
+	}
+
+	recognition.onspeechend = function() {
+	  recognition.stop();
+	}
+
+	recognition.onnomatch = function(event) {
+	  diagnostic.textContent = "I didn't understand you.";
+	}
+
+	recognition.onerror = function(event) {
+	  diagnostic.textContent = 'Error occurred in recognition: ' + event.error;
+	}
+</script>
+
+</html>

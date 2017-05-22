@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src = "include/editor.js"></script>
+<style>
+  .speech {border: 1px solid #DDD; width: 300px; padding: 0; margin: 0}
+  .speech input {border: 0; width: 240px; display: inline-block; height: 30px;}
+  .speech img {float: right; width: 40px }
+  #editor { 
+        position: absolute;
+        top: 20px;
+        right: 40%;
+        bottom: 30%;
+        left: 0;
+   }
+</style>
+</head>
+<body>
+<!-- Search Form -->
+    <h1>Speech color changer</h1>
+
+    <p class="hints"></p>
+    <div>
+        <p id="output"><em>...diagnostic messages</em></p>
+    </div>
+	<textarea id = "code"></textarea>
+	<button id = "submit">submit</button>
+	<div id = "result"></div>
+
+<!-- HTML5 Speech Recognition API -->
+<script>
+
+	var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+	var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
+	var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
+	
+	var recognition = new SpeechRecognition();
+	var speechRecognitionList = new SpeechGrammarList();
+	recognition.grammars = speechRecognitionList;
+	recognition.lang = 'en-US';
+	recognition.interimResults = false;
+	recognition.maxAlternatives = 1;
+
+	var diagnostic = document.querySelector('#output');
+	document.getElementById("output").onclick = function() {
+	  recognition.start();
+	  console.log('Ready to receive a color command.');
+	}
+
+	recognition.onresult = function(event) {
+
+	  var last = event.results.length - 1;
+	  var phrase = event.results[last][0].transcript;
+
+	  diagnostic.textContent = 'Result received: ' + phrase + '.';
+	  //bg.style.backgroundColor = color;
+	  console.log('Confidence: ' + event.results[0][0].confidence);
+	}
+
+	recognition.onspeechend = function() {
+	  recognition.stop();
+	}
+
+	recognition.onnomatch = function(event) {
+	  diagnostic.textContent = "I didn't understand you.";
+	}
+
+	recognition.onerror = function(event) {
+	  diagnostic.textContent = 'Error occurred in recognition: ' + event.error;
+	}
+	
+	var code = document.getElementById("code");
+	document.getElementById("submit").onclick = function(){ eval(code.value)};
+</script>
+</body>
+</html>

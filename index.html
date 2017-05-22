@@ -1,0 +1,195 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Webdesign</title>
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+	<script src="./jpeg_camera/dist/jpeg_camera_with_dependencies.min.js" type="text/javascript"></script>
+	<script  src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<style>
+		body{
+			background-color: #e0dfeb;
+			font-family: 'Roboto', sans-serif;
+		}
+		.header{
+			position:fixed;
+			left: -10px;
+			right: -10px;
+			height: 70px;
+			top: 0px;
+			background-color:#353a61;
+		}
+		.logo img{
+			height: 80px;
+			margin-top: -5px;
+			margin-left: 5px;
+		}
+		#body{
+			position: fixed;
+			top: 70px;
+			left: 0px;
+			right: 0px;
+			width: 100%;
+			overflow: auto;
+			height: 100%;
+		}
+		.mascot img{
+			height: 400px;
+		}
+		.mascot{
+			margin: 0 auto;
+			margin-top: 70px;
+			width: 400px;
+		}
+		#dialogbox{
+			margin-top: 30px;
+			width: 70%;
+			margin-left:15%;
+			margin-right: 15%;
+			text-align: center;
+			background-color: #353a61;
+			color: #e0dfeb;
+			font-size: 16pt;
+			padding: 10px 20px 10px 20px;
+		}
+		#dialogbox span{
+			background-color: #353a61;
+			color: #e0dfeb;
+			font-size: 16pt;
+		}
+		#questionForm{
+			margin-top: 10px;
+			width: 70%;
+			margin-left:16%;
+			margin-right: 15%;
+			height: 40px;
+		}
+		#result{
+			color: #353a61;
+			padding-left:0%;
+			margin-left: 12%;
+			height: 40px;
+			width: 65%;
+		}
+		#questionForm img{
+			width: 40px;
+		}
+		#ask{
+			background-color: #ff8086;
+			color: #353a61;
+			padding: 10px 20px 10px 20px;
+			width: 20%;
+			margin-left:38%;
+			margin-right: 40%;
+			margin-top: 20px;
+			text-align: center;
+			
+		}
+		#MediaStreamStartButton{
+			height: 200px;
+			width: 200px;
+		}
+		#submit{
+			width : 70px;
+			height: 30px
+		}
+	</style>
+	<script>
+	</script>
+    <meta name="description" content="description">
+
+    <link rel="stylesheet" href="webdesign/css/styles.css">
+</head>
+<body>
+	<input type="file" capture="camera" accept="image/*" id="cameraInput" name="cameraInput">
+
+	<div class = "header">
+	<div class = "logo">
+		<img src = "logo.png">
+	</div>
+	</div>
+	<div id = "body">
+    <div class="mascot">
+		<a href = "index2.html"><img src = "mascot.png"></a>
+    </div> 
+	<div id = "dialogbox" onclick = "document.getElementById('dialogbox').innerHTML = '<span>I can\'t wait to teach you how to code!</span>'"><span>Hello! I am Code-ee the seal dog! Welcome to Codeversation!</span></div>
+	<div id = "ask" onclick = "toggle()">Got questions?</div>
+	<div id = "questionForm">
+		<input id = "result" type = "text" placeholder = "Type your question here! Or ask it directly!"><input id = "submit"type = "submit" onclick = "analyze()">
+		<img onclick = "startRecord()" src = "mic.png">
+	</div>
+
+
+	<script>
+	
+		var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+		var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
+		var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
+		
+		var recognition = new SpeechRecognition();
+		var speechRecognitionList = new SpeechGrammarList();
+		recognition.grammars = speechRecognitionList;
+		recognition.lang = 'en-US';
+		recognition.interimResults = false;
+		recognition.maxAlternatives = 1;
+		function startRecord() {
+		  recognition.start();
+		  console.log('Ready to receive a color command.');
+		}
+		
+		var diagnostic = document.getElementById('result');
+		recognition.onresult = function(event) {
+		  var last = event.results.length - 1;
+		  var phrase = event.results[last][0].transcript;
+		  diagnostic.value = phrase + '?';
+		  console.log('Confidence: ' + event.results[0][0].confidence);
+		  analyze();
+		}
+		recognition.onspeechend = function() {
+		  recognition.stop();
+		}
+		recognition.onnomatch = function(event) {
+		  diagnostic.textContent = "I didn't understand you.";
+		}
+		recognition.onerror = function(event) {
+		  diagnostic.textContent = 'Error occurred in recognition: ' + event.error;
+		}
+		document.getElementById("questionForm").style.display = "none";
+		
+		function toggle(){
+			if (document.getElementById("questionForm").style.display == "none")
+				document.getElementById("questionForm").style.display = "block";
+			else
+				document.getElementById("questionForm").style.display = "none";
+		}
+		
+		function analyze(){
+			var question = document.getElementById("result").value;
+			if (question.search("hi") != -1 || question.search("hello") != -1)
+				document.getElementById("dialogbox").innerHTML = "Hello!";
+			else if (question.search("how are you") != -1)
+				document.getElementById("dialogbox").innerHTML = "I'm doing great! Thank you!";
+			else if (question.search("what") == 0 && question.search("this") != -1)
+			{
+				document.getElementById("dialogbox").innerHTML = "Codeversation is a website that uses basic face and voice recognition in order to teach someone how to code. <br>We have made it so that they can say something into their computer microphone and it will generate an answer to a statement or question. <br>Also if the answer seems as though it was not explained thoroughly, facial recogniton will also pick up the certain features of a confused or puzzled face and then explain in a different way. <br>The user will interact with the advatar created in order for them to learn. <br>This experience will allow for the conversation piece missing from other sites similar.";
+			}
+			else if (question.search("who") == 0 && question.search("developer") != -1){
+				document.getElementById("dialogbox").innerHTML = "Tina Q, Nicole C, Runqi L, Yue D, Jaizon C."
+			}
+			else if (question.search("why") == 0 && (question.search("create") != -1 || question.search("make")!=-1)){
+				document.getElementById("dialogbox").innerHTML = "We created codeversation becasue we felt as though it was an innovative way to teach anyone to code. We have come to the understanding that things are moving forward in a quick pace towards the highway of technology. The creation of Codeversation was mainly to teach people how to code through conversation and with the addition to a source that responds to you is almost as if you were learning a verbal language. Reason being for having a responding source is because having a source that talks back and helps to better explain gives the user a better experience and an easier way to learn. "
+			}
+			else if (question.search("how") == 0 && question.search("benefit") != -1 && question.search("user")!=-1)
+			{
+				document.getElementById("dialogbox").innerHTML = "The takeaway users get from this is an interactive experience. They learn that coding is not as hard as is said to be. It helps anyone learn to code by giving detailed explanations. If the user still looks confused or states that they are confused then the responding source explains it in a different way and that is the benefit because we offer alternatives for users to better understand the language."
+			}
+			else{
+				document.getElementById("dialogbox").innerHTML = "Sorry I don't have information about that question!"
+			}
+		
+		}
+	</script>
+
+</body>
+
+</html>
