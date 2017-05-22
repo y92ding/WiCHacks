@@ -1,4 +1,4 @@
-# Codeversation %mdash; WiCHacks 2017 Project
+# Codeversation &mdash; WiCHacks 2017 Project
 
 # Frequently Asked Questions
 
